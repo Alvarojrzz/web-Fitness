@@ -1,0 +1,78 @@
+---
+import { ejercicios } from '../data/ejercicios';
+
+const gruposMusculares = ["Todos", "Pecho", "Espalda", "Brazos", "Hombros", "Abdomen", "Piernas"];
+---
+
+<section class="py-10">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-bold text-center mb-6">Ejercicios por Grupo Muscular</h2>
+
+    <!-- Navbar de filtros -->
+    <nav class="flex justify-center mb-6">
+      {gruposMusculares.map((grupo) => (
+        <button
+          data-grupo={grupo}
+          class="mx-2 px-4 py-2 rounded-lg transition-colors duration-300 bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+        >
+          {grupo}
+        </button>
+      ))}
+    </nav>
+
+    <!-- Grid de ejercicios -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="ejercicios-grid">
+      {ejercicios.map((ejercicio) => (
+        <div
+          data-grupo={ejercicio.grupoMuscular}
+          class="ejercicio-card flex bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
+        >
+          <img
+            src={ejercicio.imagen}
+            alt={ejercicio.titulo}
+            class="w-auto h-auto object-cover"
+          />
+          <div class="w-2/3 p-4">
+            <h3 class="text-xl font-semibold text-gray-800">{ejercicio.titulo}</h3>
+            <p class="text-gray-600 mt-2">{ejercicio.descripcion}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Script para filtrar ejercicios -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('nav button[data-grupo]');
+      const cards = document.querySelectorAll('.ejercicio-card');
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const grupo = button.getAttribute('data-grupo');
+
+          // Actualizar estilos del botón activo
+          buttons.forEach((btn) => {
+            btn.classList.remove('bg-orange-500', 'text-white');
+            btn.classList.add('bg-gray-200', 'text-gray-800');
+          });
+          button.classList.add('bg-orange-500', 'text-white');
+
+          // Mostrar solo las tarjetas del grupo seleccionado
+          cards.forEach((card) => {
+            if (card.getAttribute('data-grupo') === grupo || grupo === 'Todos') {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        });
+      });
+
+      // Opcional: muestra el primer grupo por defecto
+      if (buttons.length > 0) {
+        buttons[0].dispatchEvent(new Event('click'));
+      }
+    });
+  </script>
+</section>
