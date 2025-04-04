@@ -4,61 +4,131 @@ import { ejercicios } from '../data/ejercicios';
 const gruposMusculares = ["Todos", "Pecho", "Espalda", "Brazos", "Hombros", "Abdomen", "Piernas"];
 ---
 
-<section class="py-10">
+<section class="py-16 bg-gradient-to-b from-gray-50 to-white">
   <div class="container mx-auto px-4">
-    <h2 class="text-2xl font-bold text-center mb-6">Ejercicios recomendados</h2>
+    <h2 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      Explora Nuestros Ejercicios Recomendados
+    </h2>
 
-    <!-- Navbar de filtros -->
-    <nav class="flex justify-center mb-6">
+    <!-- Filtros mejorados -->
+    <nav class="flex flex-wrap justify-center gap-3 mb-8">
       {gruposMusculares.map((grupo) => (
         <button
           data-grupo={grupo}
-          class="mx-2 px-4 py-2 rounded-lg transition-colors duration-300 bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          class={`px-5 py-2.5 rounded-full transition-all duration-300 font-medium
+                  bg-white shadow-sm hover:shadow-md border border-gray-200
+                  hover:border-blue-200 hover:bg-blue-50 text-gray-600
+                  hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500
+                  ${grupo === 'Todos' ? 'bg-blue-600 text-white' : ''}`}
         >
           {grupo}
         </button>
       ))}
     </nav>
 
-    <!-- Grid de ejercicios -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="ejercicios-grid">
-      {ejercicios.map((ejercicio) => (
-        <div
-          data-grupo={ejercicio.grupoMuscular}
-          class="ejercicio-card flex bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
-        >
-          <img
-            src={ejercicio.imagen}
-            alt={ejercicio.titulo}
-            class="w-auto h-auto object-cover"
-          />
-          <div class="w-2/3 p-4">
-            <h3 class="text-xl font-semibold text-gray-800">{ejercicio.titulo}</h3>
-            <p class="text-gray-600 mt-2">{ejercicio.descripcion}</p>
+    <!-- Slider mejorado -->
+    <div class="relative group">
+      <div class="flex gap-8 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-6 px-2">
+        {ejercicios.map((ejercicio) => (
+          <div
+            data-grupo={ejercicio.grupoMuscular}
+            class="ejercicio-card flex-shrink-0 snap-start w-80 transform hover:scale-[1.02] 
+                   transition-all duration-300 cursor-pointer group"
+          >
+            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl h-full overflow-hidden">
+              <div class="relative">
+                <img
+                  src={ejercicio.imagen}
+                  alt={ejercicio.titulo}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                  <h3 class="text-xl font-bold text-black">{ejercicio.titulo}</h3>
+                  <span class="text-sm text-black font-medium">{ejercicio.grupoMuscular}</span>
+                </div>
+                <div class="absolute top-2 right-2 flex gap-2">
+                  <span class="px-3 py-1 bg-gray-200 rounded-full text-sm font-medium text-gray-700 shadow-sm">
+                    {ejercicio.dificultad}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="p-5 space-y-3">
+                <p class="text-gray-600 line-clamp-2">{ejercicio.descripcion}</p>
+                
+                <div class="grid grid-cols-3 gap-2 text-sm">
+                  <div class="text-center p-2 bg-gray-50 rounded-lg">
+                    <p class="font-semibold text-blue-600">{ejercicio.series}</p>
+                    <p class="text-xs text-gray-500">Series</p>
+                  </div>
+                  <div class="text-center p-2 bg-gray-50 rounded-lg">
+                    <p class="font-semibold text-blue-600">{ejercicio.repeticiones}</p>
+                    <p class="text-xs text-gray-500">Reps</p>
+                  </div>
+                  <div class="text-center p-2 bg-gray-50 rounded-lg">
+                    <p class="font-semibold text-blue-600">{ejercicio.descanso}"</p>
+                    <p class="text-xs text-gray-500">Descanso</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                  </svg>
+                  <span>{ejercicio.equipo}</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      <!-- Flechas de navegación mejoradas -->
+      <button id="slider-prev" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm 
+        text-gray-600 rounded-full p-3 shadow-xl hover:shadow-2xl hover:bg-white transition-all 
+        opacity-0 group-hover:opacity-100">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button id="slider-next" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm 
+        text-gray-600 rounded-full p-3 shadow-xl hover:shadow-2xl hover:bg-white transition-all 
+        opacity-0 group-hover:opacity-100">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
     </div>
   </div>
 
-  <!-- Script para filtrar ejercicios -->
+  <!-- Script para filtrar, mostrar video y auto-slide -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const buttons = document.querySelectorAll('nav button[data-grupo]');
       const cards = document.querySelectorAll('.ejercicio-card');
+      const slider = document.getElementById('ejercicios-slider');
+      const modal = document.getElementById('video-modal');
+      const modalVideoSource = document.getElementById('modal-video-source');
+      const modalVideo = document.getElementById('modal-video');
+      const closeModalBtn = document.getElementById('close-modal');
+      const prevBtn = document.getElementById('slider-prev');
+      const nextBtn = document.getElementById('slider-next');
 
+      // Filtrado de tarjetas por grupo muscular
       buttons.forEach((button) => {
         button.addEventListener('click', () => {
           const grupo = button.getAttribute('data-grupo');
 
-          // Actualizar estilos del botón activo
-          buttons.forEach((btn) => {
-            btn.classList.remove('bg-orange-500', 'text-white');
-            btn.classList.add('bg-gray-200', 'text-gray-800');
+          buttons.forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('bg-white', 'text-gray-600');
           });
-          button.classList.add('bg-orange-500', 'text-white');
+          
+          // Añadir clases activas al botón clickeado
+          button.classList.add('bg-blue-600', 'text-white');
+          button.classList.remove('bg-white', 'text-gray-600');
 
-          // Mostrar solo las tarjetas del grupo seleccionado
           cards.forEach((card) => {
             if (card.getAttribute('data-grupo') === grupo || grupo === 'Todos') {
               card.classList.remove('hidden');
@@ -69,7 +139,21 @@ const gruposMusculares = ["Todos", "Pecho", "Espalda", "Brazos", "Hombros", "Abd
         });
       });
 
-      // Opcional: muestra el primer grupo por defecto
+      // Función de desplazamiento (scroll) del slider
+      function scrollSlider(offset) {
+        slider.scrollBy({ left: offset, behavior: 'smooth' });
+      }
+
+      // Botones de navegación
+      prevBtn.addEventListener('click', () => scrollSlider(-300));
+      nextBtn.addEventListener('click', () => scrollSlider(300));
+
+      // Auto-slide cada 5 segundos
+      setInterval(() => {
+        scrollSlider(300);
+      }, 5000);
+
+      // Opcional: mostrar el primer grupo por defecto
       if (buttons.length > 0) {
         buttons[0].dispatchEvent(new Event('click'));
       }
